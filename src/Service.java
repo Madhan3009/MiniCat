@@ -33,7 +33,7 @@ public class Service implements Runnable {
 
             String responseHeaders = requestHandler.getResponseHeaders();
             byte[] bodyBytes = requestHandler.getBodyBytes();
-
+            System.out.println(responseHeaders);
             output.write(responseHeaders.getBytes(StandardCharsets.UTF_8));
             output.write(bodyBytes);
             output.flush();

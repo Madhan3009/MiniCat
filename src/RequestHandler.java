@@ -5,18 +5,20 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class RequestHandler {
     private final BufferedReader reader;
     private byte[] bodyBytes;
-    private String responseHeaders;
-    private String method;
-    private String path;
+    private String responseHeaders = null;
+    private String method = null;
+    private String path = null;
     private Map<String,String> requestHeaders;
     public RequestHandler(BufferedReader reader) {
         this.reader = reader;
+        this.requestHeaders = new HashMap<>();
     }
 
     public void processRequest() throws IOException {
@@ -62,8 +64,9 @@ public class RequestHandler {
 
         method = parts[0];
         path = parts[1];
-
-        serveFile(path);
+        if ("/".equals(path)) {
+            path = "/index.html";
+        }
     }
     public void serveRequestHeaders() throws IOException{
         String headerline;
@@ -79,6 +82,7 @@ public class RequestHandler {
             requestHeaders.put(name.toLowerCase(),value);
         }
         System.out.println(STR."Method: \{method}");
+        System.out.println(STR."Path: \{path}");
         System.out.println(STR."Host: \{requestHeaders.get("host")}");
         System.out.println(STR."User-agent: \{requestHeaders.get("user-agent")}");
     }
